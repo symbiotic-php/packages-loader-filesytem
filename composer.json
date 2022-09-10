@@ -3,6 +3,19 @@
   "description": "Allows you to add packages to the core of the Symbiotic framework from the file system.",
   "version": "1.4.0",
   "type": "library",
+  "homepage": "https://symbioticphp.com",
+  "authors": [
+    {
+      "name": "Surkov Sergey",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "site":  "https://symbioticphp.com/support/",
+    "telegram": "https://t.me/symbioticphp"
+  },
+
+  "license": ["BSD-3-Clause"],
   "keywords": [
     "symbiotic package",
     "packages loader",
@@ -15,5 +28,6 @@
     "psr-4": {
       "Symbiotic\\Packages\\Loader\\": "src/Packages/Loader/"
     }
-  }
+  },
+  "minimum-stability": "dev"
 }
