@@ -58,11 +58,17 @@ class PackagesLoaderFilesystem implements PackagesLoaderInterface
         for ($i = 0; $i < $this->max_depth; $i++) {
             $level = str_repeat('/*', $i);
             $files = array_merge($files, glob($dir . $level . '/composer.json', GLOB_NOSORT));
+            $files = array_merge($files, glob($dir . $level . '/symbiotic.json', GLOB_NOSORT));
         }
 
         foreach ($files as $file) {
             if (\is_readable($file)) {
-                $config = Arr::get(@\json_decode(file_get_contents($file), true) ?? [], 'extra.symbiotic');
+                if(str_ends_with($file,'symbiotic.json')) {
+                    $config = @\json_decode(file_get_contents($file), true);
+                } else {
+                    $config = Arr::get(@\json_decode(file_get_contents($file), true) ?? [], 'extra.symbiotic');
+                }
+
                 if (is_array($config)) {
                     $app = Arr::get($config, 'app');
                     $config['base_path'] = dirname($file);

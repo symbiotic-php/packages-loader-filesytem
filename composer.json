@@ -1,7 +1,7 @@
 {
   "name": "symbiotic/packages-loader-filesytem",
   "description": "Allows you to add packages to the core of the Symbiotic framework from the file system.",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "type": "library",
   "homepage": "https://symbioticphp.com",
   "authors": [
