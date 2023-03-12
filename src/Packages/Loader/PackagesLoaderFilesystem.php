@@ -17,9 +17,7 @@ class PackagesLoaderFilesystem implements PackagesLoaderInterface
      * @param array $scan_dirs
      * @param int   $max_depth
      */
-    public function __construct(protected array $scan_dirs = [], protected int $max_depth = 3)
-    {
-    }
+    public function __construct(protected array $scan_dirs = [], protected int $max_depth = 3) {}
 
     /**
      * @inheritDoc
@@ -63,15 +61,21 @@ class PackagesLoaderFilesystem implements PackagesLoaderInterface
 
         foreach ($files as $file) {
             if (\is_readable($file)) {
-                if(str_ends_with($file,'symbiotic.json')) {
+                $dir = dirname($file);
+                $composerFile = $dir . '/composer.json';
+                $composerConfig = \is_readable($composerFile) ?
+                    @\json_decode(\file_get_contents($composerFile), true) : [];
+
+                if (str_ends_with($file, 'symbiotic.json')) {
                     $config = @\json_decode(file_get_contents($file), true);
                 } else {
-                    $config = Arr::get(@\json_decode(file_get_contents($file), true) ?? [], 'extra.symbiotic');
+                    $config = Arr::get($composerConfig ?? [], 'extra.symbiotic');
                 }
 
                 if (is_array($config)) {
                     $app = Arr::get($config, 'app');
                     $config['base_path'] = dirname($file);
+                    $config['namespaces'] = Arr::get($composerConfig ?? [], 'autoload.psr-4', []);
                     if (is_array($app)) {
                         $app['base_path'] = $config['base_path'];
                         $config['app'] = $app;
@@ -80,6 +84,7 @@ class PackagesLoaderFilesystem implements PackagesLoaderInterface
                 }
             }
         }
+
         return $packages;
     }
 }
